@@ -11,3 +11,17 @@ function handleSearch() {
     message.classList.add("show");
   }
   
+  function toggleTheme() {
+    const html = document.documentElement;
+    const icon = document.getElementById("themeIcon");
+    const isLight = html.getAttribute("data-theme") === "light";
+  
+    if (isLight) {
+      html.setAttribute("data-theme", "dark");
+      icon.src = "assets/icons/sun.svg";
+    } else {
+      html.setAttribute("data-theme", "light");
+      icon.src = "assets/icons/moon.svg";
+    }
+  }
+  
