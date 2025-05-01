@@ -3,18 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>LeakSociety</title>
+  <title>MiniApp UI</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="welcome-screen" id="welcomeScreen">
-    <h1>LEAKSOCIETY</h1>
+    <h1>FSOCIETY</h1>
     <p>A NEW LIGHT</p>
   </div>
 
   <div class="container">
     <div class="user-section" id="userSection">
+      <div class="user-info">
+        <div class="user-avatar">
+          <img src="assets/avatar.jpg" alt="User Avatar" />
+        </div>
+        <div class="user-greeting">
+          <p>Hello, <span id="username">User</span></p>
+        </div>
+      </div>
       <div class="info-card">
         <div>Leak Count:</div>
         <div class="number">745</div>
@@ -53,7 +61,7 @@
 
     <div class="nav-bar">
       <div class="nav-button" id="privacyBtn">
-        <img src="assets/icons/shield.svg" alt="Privacy Policy">
+        <img src="assets/icons/privacy.svg" alt="Privacy Policy">
       </div>
       <div class="nav-button" id="searchBtn">
         <img src="assets/icons/search.svg" alt="Search">
