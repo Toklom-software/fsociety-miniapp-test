@@ -63,12 +63,28 @@
       transform: translateY(0);
     }
 
+    .greeting-container {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
     .greeting {
       font-size: 2rem;
       font-weight: 600;
       letter-spacing: 1px;
       color: #ffffff;
-      margin-bottom: 12px;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-image: url('https://via.placeholder.com/40'); /* Default placeholder */
+      background-size: cover;
+      background-position: center;
     }
 
     .info-card {
@@ -163,8 +179,10 @@
       const tg = window.Telegram.WebApp;
       tg.expand(); 
       const username = tg.initDataUnsafe?.user?.username || "guest";
+      const userPhotoUrl = tg.initDataUnsafe?.user?.photo_url || "https://via.placeholder.com/40"; 
 
       document.querySelector(".greeting").textContent = `Hello, ${username}`;
+      document.querySelector(".avatar").style.backgroundImage = `url(${userPhotoUrl})`;
 
       const userBtn = document.getElementById("userBtn");
       const searchBtn = document.getElementById("searchBtn");
@@ -211,7 +229,10 @@
 <body>
   <div class="container">
     <div class="user-section" id="userSection">
-      <h1 class="greeting">Hello, guest</h1>
+      <div class="greeting-container">
+        <h1 class="greeting">Hello, guest</h1>
+        <div class="avatar"></div>
+      </div>
       <div class="info-card">
         <div>Leak Count:</div>
         <div class="number">745</div>
