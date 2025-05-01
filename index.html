@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>LeakSociety</title>
+  <title>MiniApp UI</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -32,7 +32,47 @@
       height: 100vh;
       overflow: hidden;
       margin: 0;
-      padding-bottom: 60px; 
+      padding-bottom: 60px;
+    }
+
+    .welcome-screen {
+      position: absolute;
+      left: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      text-align: left;
+      z-index: 10;
+      animation: fadeInUp 1s ease forwards;
+    }
+
+    .welcome-screen h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #889eff, #6366f1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.2em;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .welcome-screen p {
+      font-size: 1.2rem;
+      color: var(--text-color);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      opacity: 0.85;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(-60%);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(-50%);
+      }
     }
 
     .container {
@@ -46,10 +86,10 @@
       margin-bottom: 60px;
     }
 
-    .user-section {
+    .user-section,
+    .search-section {
       display: none;
       flex-direction: column;
-      align-items: center;
       gap: 16px;
       margin-top: 20px;
       opacity: 0;
@@ -57,34 +97,11 @@
       transition: opacity 0.3s ease, transform 0.3s ease;
     }
 
-    .user-section.active {
+    .user-section.active,
+    .search-section.active {
       display: flex;
       opacity: 1;
       transform: translateY(0);
-    }
-
-    .greeting-container {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-
-    .greeting {
-      font-size: 2rem;
-      font-weight: 600;
-      letter-spacing: 1px;
-      color: #ffffff;
-    }
-
-    .avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background-image: url('https://via.placeholder.com/40'); 
-      background-size: cover;
-      background-position: center;
     }
 
     .info-card {
@@ -107,25 +124,87 @@
     }
 
     .info-card .number {
-      font-size: 2.5rem; 
+      font-size: 2.5rem;
       font-weight: 700;
+      color: var(--highlight-color);
+    }
+
+    .search-wrapper {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .search-input {
+      padding: 16px 18px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 12px;
+      background: var(--card-bg);
+      color: var(--text-color);
+      box-shadow: 0 2px 10px var(--shadow-color);
+      outline: none;
+      flex-grow: 1;
+    }
+
+    .search-button {
+      background: var(--accent-color);
+      border: none;
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 14px 20px;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px var(--shadow-color);
+      transition: background 0.2s ease;
+    }
+
+    .search-button:hover {
+      background: #4f51d6;
+    }
+
+    .search-results {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 6px 16px var(--shadow-color);
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .search-results.active {
+      display: flex;
+    }
+
+    .result-entry {
+      display: flex;
+      flex-direction: column;
+      font-size: 1rem;
+      padding: 8px;
+      border-left: 3px solid var(--accent-color);
+    }
+
+    .result-entry .label {
+      font-weight: 600;
       color: var(--highlight-color);
     }
 
     .nav-bar {
       position: fixed;
       bottom: 16px;
-      left: 16px;
-      right: 16px;
+      width: 100%;
+      max-width: 400px;
       display: flex;
       justify-content: space-around;
       background: var(--card-bg);
       border-radius: 20px;
-      padding: 10px 0;
+      padding: 12px 0;
       box-shadow: 0 4px 16px var(--shadow-color);
       backdrop-filter: blur(10px);
     }
-
 
     .nav-button {
       display: flex;
@@ -160,17 +239,16 @@
       .container {
         padding: 16px;
       }
-      .greeting {
-        font-size: 1.5rem;
-      }
+
       .info-card {
         height: 110px;
         padding: 16px;
         font-size: 1rem;
       }
+
       .nav-bar {
-        bottom: 10px;
-        padding: 8px 0;
+        bottom: 12px;
+        padding: 10px 0;
       }
     }
   </style>
@@ -178,23 +256,48 @@
   <script defer>
     window.addEventListener("DOMContentLoaded", () => {
       const tg = window.Telegram.WebApp;
-      tg.expand(); 
-      const username = tg.initDataUnsafe?.user?.username || "guest";
-      const userPhotoUrl = tg.initDataUnsafe?.user?.photo_url || "https://via.placeholder.com/40"; 
-
-      document.querySelector(".greeting").textContent = `Hello, ${username}`;
-      document.querySelector(".avatar").style.backgroundImage = `url(${userPhotoUrl})`;
+      tg.expand();
 
       const userBtn = document.getElementById("userBtn");
       const searchBtn = document.getElementById("searchBtn");
       const historyBtn = document.getElementById("historyBtn");
       const userSection = document.getElementById("userSection");
+      const searchSection = document.getElementById("searchSection");
+      const searchInput = document.getElementById("searchInput");
+      const searchButton = document.getElementById("searchButton");
+      const searchResults = document.getElementById("searchResults");
 
       const buttons = [userBtn, searchBtn, historyBtn];
 
       function clearActive() {
         buttons.forEach(btn => btn.classList.remove("active"));
         userSection.classList.remove("active");
+        searchSection.classList.remove("active");
+        document.getElementById("welcomeScreen")?.remove();
+      }
+
+      function performSearch(query) {
+        searchResults.innerHTML = "";
+
+        if (query === "тест" || query === "test") {
+          const result = document.createElement("div");
+          result.className = "result-entry";
+          result.innerHTML = `
+            <div><span class="label">Name:</span> Test</div>
+            <div><span class="label">Telegram:</span> @vkmef</div>
+          `;
+          searchResults.appendChild(result);
+          searchResults.classList.add("active");
+        } else {
+          const result = document.createElement("div");
+          result.className = "result-entry";
+          result.innerHTML = `
+            <div><span class="label">Name:</span> Unknown</div>
+            <div><span class="label">Telegram:</span> Not found</div>
+          `;
+          searchResults.appendChild(result);
+          searchResults.classList.add("active");
+        }
       }
 
       userBtn.addEventListener("click", () => {
@@ -206,11 +309,7 @@
       searchBtn.addEventListener("click", () => {
         clearActive();
         searchBtn.classList.add("active");
-        tg.showPopup({
-          title: "Search",
-          message: "Search functionality is not yet implemented.",
-          buttons: [{ type: "ok" }]
-        });
+        searchSection.classList.add("active");
       });
 
       historyBtn.addEventListener("click", () => {
@@ -223,17 +322,21 @@
         });
       });
 
-      userBtn.click();
+      searchButton.addEventListener("click", () => {
+        const query = searchInput.value.trim().toLowerCase();
+        performSearch(query);
+      });
     });
   </script>
 </head>
 <body>
+  <div class="welcome-screen" id="welcomeScreen">
+    <h1>FSOCIETY</h1>
+    <p>A NEW LIGHT</p>
+  </div>
+
   <div class="container">
     <div class="user-section" id="userSection">
-      <div class="greeting-container">
-        <h1 class="greeting">Hello, guest</h1>
-        <div class="avatar"></div>
-      </div>
       <div class="info-card">
         <div>Leak Count:</div>
         <div class="number">745</div>
@@ -246,6 +349,14 @@
         <div>Total Lines:</div>
         <div class="number">6,385,384,238</div>
       </div>
+    </div>
+
+    <div class="search-section" id="searchSection">
+      <div class="search-wrapper">
+        <input type="text" class="search-input" placeholder="Enter search query..." id="searchInput" />
+        <button class="search-button" id="searchButton">Search</button>
+      </div>
+      <div class="search-results" id="searchResults"></div>
     </div>
 
     <div class="nav-bar">
