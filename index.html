@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>MiniApp UI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="welcome-screen" id="welcomeScreen">
+    <h1>LEAKSOCIETY</h1>
+    <p>A NEW LIGHT</p>
+  </div>
+
+  <div class="container">
+    <div class="user-section" id="userSection">
+      <div class="info-card">
+        <div>Leak Count:</div>
+        <div class="number">745</div>
+      </div>
+      <div class="info-card">
+        <div>Leak Size:</div>
+        <div class="number">3 TB</div>
+      </div>
+      <div class="info-card">
+        <div>Total Lines:</div>
+        <div class="number">6,385,384,238</div>
+      </div>
+    </div>
+
+    <div class="search-section" id="searchSection">
+      <div class="search-wrapper">
+        <input type="text" class="search-input" placeholder="Enter search query..." id="searchInput" />
+        <button class="search-button" id="searchButton">Search</button>
+      </div>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+
+    <div class="privacy-policy" id="privacySection">
+      <h2>Privacy Policy</h2>
+      <p><strong>1. Bot does not collect data</strong></p>
+      <p>Our bot does not track users, does not collect personal data, does not log requests and does not use third-party trackers.</p>
+      <p><strong>2. The bot does not store search results</strong></p>
+      <p>Any information received by the bot exists only during an active session. Once a response is sent, all data is permanently deleted with no possibility of recovery.</p>
+      <p><strong>3. The Bot does not cooperate with third parties</strong></p>
+      <p>We do not share information with government agencies, private companies or any other entities. The bot works independently and does not participate in monitoring programs.</p>
+      <p><strong>4. Complete anonymity</strong></p>
+      <p>We do not identify users, link their requests to personal data or restrict access to information. The bot is designed to ensure freedom of information.</p>
+      <p><strong>5. Disclaimer</strong></p>
+      <p>Use of the bot is at your own risk. We are not responsible for its use, as well as for possible consequences associated with access to the information received.</p>
+    </div>
+
+    <div class="nav-bar">
+      <div class="nav-button" id="privacyBtn">
+        <img src="assets/icons/shield.svg" alt="Privacy Policy">
+      </div>
+      <div class="nav-button" id="searchBtn">
+        <img src="assets/icons/search.svg" alt="Search">
+      </div>
+      <div class="nav-button" id="userBtn">
+        <img src="assets/icons/user.svg" alt="User">
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
