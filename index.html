@@ -5,7 +5,370 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>LeakSociety</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+  <style>
+    :root {
+      --primary-bg: #1a1d2e;
+      --card-bg: #25283d;
+      --accent-color: #6366f1;
+      --text-color: #e2e8f0;
+      --shadow-color: rgba(0, 0, 0, 0.5);
+      --highlight-color: #889eff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, var(--primary-bg), #2a2d45);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+      overflow: hidden;
+      margin: 0;
+      padding-bottom: 60px;
+    }
+
+    .welcome-screen {
+      position: absolute;
+      left: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      text-align: left;
+      z-index: 10;
+      animation: fadeInUp 1s ease forwards;
+    }
+
+    .welcome-screen h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #889eff, #6366f1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.2em;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .welcome-screen p {
+      font-size: 1.2rem;
+      color: var(--text-color);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      opacity: 0.85;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(-60%);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(-50%);
+      }
+    }
+
+    .container {
+      width: 100%;
+      max-width: 400px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      height: 100%;
+      margin-bottom: 60px;
+    }
+
+    .user-section,
+    .search-section,
+    .privacy-policy {
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 20px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .user-section.active,
+    .search-section.active,
+    .privacy-policy.active {
+      display: flex;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .info-card {
+      width: 100%;
+      height: 130px;
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 6px 16px var(--shadow-color);
+      font-size: 1.1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      transition: transform 0.3s ease;
+    }
+
+    .info-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .info-card .number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--highlight-color);
+    }
+
+    .search-wrapper {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .search-input {
+      padding: 16px 18px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 12px;
+      background: var(--card-bg);
+      color: var(--text-color);
+      box-shadow: 0 2px 10px var(--shadow-color);
+      outline: none;
+      flex-grow: 1;
+    }
+
+    .search-button {
+      background: var(--accent-color);
+      border: none;
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 14px 20px;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px var(--shadow-color);
+      transition: background 0.2s ease;
+    }
+
+    .search-button:hover {
+      background: #4f51d6;
+    }
+
+    .search-results {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 6px 16px var(--shadow-color);
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .search-results.active {
+      display: flex;
+    }
+
+    .result-entry {
+      display: flex;
+      flex-direction: column;
+      font-size: 1rem;
+      padding: 8px;
+      border-left: 3px solid var(--accent-color);
+    }
+
+    .result-entry .label {
+      font-weight: 600;
+      color: var(--highlight-color);
+    }
+
+    .nav-bar {
+      position: fixed;
+      bottom: 16px;
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      justify-content: space-around;
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 12px 0;
+      box-shadow: 0 4px 16px var(--shadow-color);
+      backdrop-filter: blur(10px);
+    }
+
+    .nav-button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      background: var(--card-bg);
+    }
+
+    .nav-button img {
+      width: 24px;
+      height: 24px;
+      filter: invert(90%);
+      transition: filter 0.3s ease;
+    }
+
+    .nav-button.active {
+      background: var(--accent-color);
+      transform: scale(1.1);
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.5);
+    }
+
+    .nav-button.active img {
+      filter: invert(100%);
+    }
+
+    @media (max-height: 600px) {
+      .container {
+        padding: 16px;
+      }
+
+      .info-card {
+        height: 110px;
+        padding: 16px;
+        font-size: 1rem;
+      }
+
+      .nav-bar {
+        bottom: 12px;
+        padding: 10px 0;
+      }
+    }
+
+    .privacy-policy {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: left;
+      box-shadow: 0 6px 16px var(--shadow-color);
+      font-size: 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .privacy-policy h2 {
+      font-size: 1.5rem;
+      color: var(--highlight-color);
+      margin-bottom: 1em;
+    }
+
+    .privacy-policy p {
+      margin-bottom: 0.5em;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-left: 10px;
+    }
+  </style>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script defer>
+    window.addEventListener("DOMContentLoaded", () => {
+      const tg = window.Telegram.WebApp;
+      tg.expand();
+      const user = tg.initDataUnsafe?.user;
+      const userBtn = document.getElementById("userBtn");
+      const searchBtn = document.getElementById("searchBtn");
+      const privacyBtn = document.getElementById("privacyBtn");
+      const userSection = document.getElementById("userSection");
+      const searchSection = document.getElementById("searchSection");
+      const searchInput = document.getElementById("searchInput");
+      const searchButton = document.getElementById("searchButton");
+      const searchResults = document.getElementById("searchResults");
+      const privacySection = document.getElementById("privacySection");
+      const buttons = [userBtn, searchBtn, privacyBtn];
+
+      function clearActive() {
+        buttons.forEach(btn => btn.classList.remove("active"));
+        userSection.classList.remove("active");
+        searchSection.classList.remove("active");
+        privacySection.classList.remove("active");
+        document.getElementById("welcomeScreen")?.remove();
+      }
+
+      function performSearch(query) {
+        searchResults.innerHTML = "";
+
+        if (query === "тест" || query === "test") {
+          const result = document.createElement("div");
+          result.className = "result-entry";
+          result.innerHTML = `
+            <div><span class="label">Name:</span> Test</div>
+            <div><span class="label">Telegram:</span> @vkmef</div>
+          `;
+          searchResults.appendChild(result);
+          searchResults.classList.add("active");
+        } else {
+          const result = document.createElement("div");
+          result.className = "result-entry";
+          result.innerHTML = `
+            <div><span class="label">Name:</span> Unknown</div>
+            <div><span class="label">Telegram:</span> Not found</div>
+          `;
+          searchResults.appendChild(result);
+          searchResults.classList.add("active");
+        }
+      }
+
+      userBtn.addEventListener("click", () => {
+        clearActive();
+        userBtn.classList.add("active");
+        userSection.classList.add("active");
+      });
+
+      searchBtn.addEventListener("click", () => {
+        clearActive();
+        searchBtn.classList.add("active");
+        searchSection.classList.add("active");
+      });
+
+      privacyBtn.addEventListener("click", () => {
+        clearActive();
+        privacyBtn.classList.add("active");
+        privacySection.classList.add("active");
+      });
+
+      searchButton.addEventListener("click", () => {
+        const query = searchInput.value.trim().toLowerCase();
+        performSearch(query);
+      });
+
+      const welcomeScreen = document.getElementById("welcomeScreen");
+
+      if (user) {
+        const avatarUrl = user.photo_url || "https://via.placeholder.com/150";
+        const username = user.username || "User";
+
+        welcomeScreen.innerHTML = `
+          <h1>LEAKSOCIETY</h1>
+          <p>Hello, <strong>${username}</strong></p>
+          <img src="${avatarUrl}" alt="User Avatar" class="user-avatar" />
+        `;
+      }
+    });
+  </script>
 </head>
 <body>
   <div class="welcome-screen" id="welcomeScreen">
@@ -31,7 +394,7 @@
 
     <div class="search-section" id="searchSection">
       <div class="search-wrapper">
-        <input type="text" class="search-input" placeholder="Enter search query..." id="searchInput" />
+        <input type="text" class="search-input" placeholder="Enter search query..." id="searchInput" autocomplete="off" />
         <button class="search-button" id="searchButton">Search</button>
       </div>
       <div class="search-results" id="searchResults"></div>
@@ -39,31 +402,24 @@
 
     <div class="privacy-policy" id="privacySection">
       <h2>Privacy Policy</h2>
-      <p><strong>1. Bot does not collect data</strong></p>
-      <p>Our bot does not track users, does not collect personal data, does not log requests and does not use third-party trackers.</p>
-      <p><strong>2. The bot does not store search results</strong></p>
-      <p>Any information received by the bot exists only during an active session. Once a response is sent, all data is permanently deleted with no possibility of recovery.</p>
-      <p><strong>3. The Bot does not cooperate with third parties</strong></p>
-      <p>We do not share information with government agencies, private companies or any other entities. The bot works independently and does not participate in monitoring programs.</p>
-      <p><strong>4. Complete anonymity</strong></p>
-      <p>We do not identify users, link their requests to personal data or restrict access to information. The bot is designed to ensure freedom of information.</p>
-      <p><strong>5. Disclaimer</strong></p>
-      <p>Use of the bot is at your own risk. We are not responsible for its use, as well as for possible consequences associated with access to the information received.</p>
-    </div>
-
-    <div class="nav-bar">
-      <div class="nav-button" id="privacyBtn">
-        <img src="assets/icons/privacy.svg" alt="Privacy Policy">
-      </div>
-      <div class="nav-button" id="searchBtn">
-        <img src="assets/icons/search.svg" alt="Search">
-      </div>
-      <div class="nav-button" id="userBtn">
-        <img src="assets/icons/user.svg" alt="User">
-      </div>
+      <p>This tool is intended strictly for entertainment purposes only — such as pranks, jokes among friends, and other harmless scenarios. All content generated during its use is created using the Grok neural network developed by a foreign company. The author of this tool is not responsible for any inaccuracies or peculiarities caused by the neural network’s behavior.</p>
+      
+      <p>All examples, descriptions, and scenarios presented within the tool are fictional. The author is mentally stable, holds no hostility toward any state or authority, and does not promote or engage in destructive behavior.</p>
+      
+      <p>The tool does not utilize or process any real personal data. All displayed or generated information is created via AI and has no direct correlation to actual individuals. In rare cases, the neural network may generate content that closely resembles real-world data; in such cases, it is purely coincidental.</p>
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <div class="nav-bar">
+    <div class="nav-button" id="userBtn">
+      <img src="https://img.icons8.com/ios/452/user.png" />
+    </div>
+    <div class="nav-button active" id="searchBtn">
+      <img src="https://img.icons8.com/ios/452/search.png" />
+    </div>
+    <div class="nav-button" id="privacyBtn">
+      <img src="https://img.icons8.com/ios/452/privacy.png" />
+    </div>
+  </div>
 </body>
 </html>
