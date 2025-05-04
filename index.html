@@ -276,25 +276,29 @@
       margin-bottom: 0.5em;
     }
 
-    .user-header {
+    .profile-header {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 10px;
+      background: var(--card-bg);
+      padding: 16px 20px;
+      border-radius: 16px;
+      box-shadow: 0 6px 16px var(--shadow-color);
+      margin-bottom: 20px;
     }
 
-    .user-header img {
+    .profile-header .welcome-text {
+      font-size: 1.6rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--text-color);
+    }
+
+    .profile-header .user-avatar {
       width: 48px;
       height: 48px;
       border-radius: 50%;
       object-fit: cover;
-      box-shadow: 0 4px 8px var(--shadow-color);
-    }
-
-    .user-header span {
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: var(--highlight-color);
     }
   </style>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -313,18 +317,18 @@
       const searchResults = document.getElementById("searchResults");
       const privacySection = document.getElementById("privacySection");
       const buttons = [userBtn, searchBtn, privacyBtn];
-      const welcomeScreen = document.getElementById("welcomeScreen");
 
       function clearActive() {
         buttons.forEach(btn => btn.classList.remove("active"));
         userSection.classList.remove("active");
         searchSection.classList.remove("active");
         privacySection.classList.remove("active");
-        welcomeScreen?.remove();
+        document.getElementById("welcomeScreen")?.remove();
       }
 
       function performSearch(query) {
         searchResults.innerHTML = "";
+
         if (query === "тест" || query === "test") {
           const result = document.createElement("div");
           result.className = "result-entry";
@@ -369,17 +373,19 @@
         performSearch(query);
       });
 
+      const welcomeScreen = document.getElementById("welcomeScreen");
+
       if (user) {
-        const username = user.first_name || "User";
-        const avatarUrl = user.photo_url || `https://t.me/i/userpic/320/${user.username}.jpg` || "https://via.placeholder.com/150";
-        const userHeader = document.createElement("div");
-        userHeader.className = "user-header";
-        userHeader.innerHTML = `
-          <img src="${avatarUrl}" alt="Avatar" />
-          <span>Hello, ${username}</span>
-        `;
-        const section = document.getElementById("userSection");
-        section.insertBefore(userHeader, section.firstChild);
+        const avatarUrl = user.photo_url || "https://via.placeholder.com/150";
+        const username = user.username || "User";
+
+        const profileHeader = document.getElementById("profileHeader");
+        if (profileHeader) {
+          profileHeader.innerHTML = `
+            <div class="welcome-text">Hello, <strong>${username}</strong></div>
+            <img src="${avatarUrl}" alt="User Avatar" class="user-avatar" />
+          `;
+        }
       }
     });
   </script>
@@ -392,6 +398,7 @@
 
   <div class="container">
     <div class="user-section" id="userSection">
+      <div class="profile-header" id="profileHeader"></div>
       <div class="info-card">
         <div>Leak Count:</div>
         <div class="number">745</div>
@@ -417,6 +424,7 @@
     <div class="privacy-policy" id="privacySection">
       <h2>Privacy Policy</h2>
       <p>This tool is intended strictly for entertainment purposes only — such as pranks, jokes among friends, and other harmless scenarios. All content generated during its use is created using the Grok neural network developed by a foreign company. The author of this tool is not responsible for any inaccuracies or peculiarities caused by the neural network’s behavior.</p>
+      
       <p>All examples, descriptions, and scenarios presented within the tool are fictional. The author is mentally stable, holds no hostility toward any state or authority, and does not promote or engage in destructive behavior.</p>
     </div>
   </div>
